@@ -1,0 +1,17 @@
+syntax = "proto3";
+package flchain.flchain;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "flchain/flchain/params.proto";
+
+option go_package = "flchain/x/flchain/types";
+
+// GenesisState defines the flchain module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
