@@ -3,6 +3,7 @@
 // L-node가 제출한 학습 결과를 저장하는 구조체 정의
 // SPDX-License-Identifier: Apache-2.0
 // 테스트
+// test
 
 package types
 
