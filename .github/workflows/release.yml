@@ -14,6 +14,10 @@
 # default branch.
 on: push
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   might_release:
     runs-on: ubuntu-latest
