@@ -53,7 +53,10 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
+	committeemodulev1 "flchain/api/flchain/committee/module"
 	flchainmodulev1 "flchain/api/flchain/flchain/module"
+	_ "flchain/x/committee/module" // import for side-effects
+	committeemoduletypes "flchain/x/committee/types"
 	_ "flchain/x/flchain/module" // import for side-effects
 	flchainmoduletypes "flchain/x/flchain/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -94,6 +97,7 @@ var (
 		circuittypes.ModuleName,
 		// chain modules
 		flchainmoduletypes.ModuleName,
+		committeemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -119,6 +123,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		flchainmoduletypes.ModuleName,
+		committeemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -138,6 +143,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		flchainmoduletypes.ModuleName,
+		committeemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -296,6 +302,10 @@ var (
 			{
 				Name:   flchainmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&flchainmodulev1.Module{}),
+			},
+			{
+				Name:   committeemoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&committeemodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

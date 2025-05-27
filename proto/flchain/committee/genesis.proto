@@ -1,0 +1,17 @@
+syntax = "proto3";
+package flchain.committee;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "flchain/committee/params.proto";
+
+option go_package = "flchain/x/committee/types";
+
+// GenesisState defines the committee module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
