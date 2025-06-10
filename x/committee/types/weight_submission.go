@@ -1,7 +1,10 @@
 // submit-weight 모듈
 // 상태 저장 구조 정의
 // L-node가 제출한 학습 결과를 저장하는 구조체 정의
-// SPDX-License-Identifier: Apache-2.0
+
+// weight_submission은 저장할 데이터 구조체
+// 키를 만들 때 라운드와 L-node ID를 조합해서 겹치지 않도록 보장
+// binary.BigEndian.PutUint64()을 쓰는 건 Cosmos SDK 키 정렬 기준과 맞추기 위함
 
 package types
 

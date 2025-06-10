@@ -1,0 +1,12 @@
+syntax = "proto3";
+package committee;
+
+option go_package = "flchain/x/committee/types";
+
+// L-node가 제출하는 학습결과 저장용 상태 구조
+message Submission {
+  string creator = 1;          // 제출자 주소
+  string lnodeId = 2;          // L-node ID
+  string encryptedWeight = 3;  // 암호화된 학습 결과
+  uint64 round = 4;            // 제출 라운드
+}
