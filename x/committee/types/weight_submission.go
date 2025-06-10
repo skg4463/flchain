@@ -5,6 +5,7 @@
 // weight_submission은 저장할 데이터 구조체
 // 키를 만들 때 라운드와 L-node ID를 조합해서 겹치지 않도록 보장
 // binary.BigEndian.PutUint64()을 쓰는 건 Cosmos SDK 키 정렬 기준과 맞추기 위함
+// 사용 x
 
 package types
 
