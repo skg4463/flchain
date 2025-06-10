@@ -2,7 +2,6 @@ package types
 
 import (
 	"encoding/binary"
-	"fmt"
 )
 
 const (
@@ -33,9 +32,12 @@ func SubmissionKey(round uint64, lnodeId string) []byte {
 	return append([]byte("submission:"+lnodeId+":"), roundBytes...)
 }
 
-// ScoreKey는 round+cnodeId+lnodeId로 유니크하게 생성
+// ScoreKey는 라운드, cnodeId, lnodeId 조합으로 유니크한 key 생성
 // cnodeId는 committee node ID, lnodeId는 learner node ID
 // 예: "score:1:cnode1:lnode1"
-func ScoreKey(round uint64, cnodeId string, lnodeId string) []byte {
-	return []byte(fmt.Sprintf("score:%d:%s:%s", round, cnodeId, lnodeId))
+func ScoreKey(round uint64, cnodeId, lnodeId string) []byte {
+	roundBytes := make([]byte, 8)
+	binary.BigEndian.PutUint64(roundBytes, round)
+	// 접두사("score:"), round, cnodeId, lnodeId 순으로 단순 이어붙임
+	return append(append(append([]byte("score:"), roundBytes...), []byte(":"+cnodeId+":")...), []byte(lnodeId)...)
 }

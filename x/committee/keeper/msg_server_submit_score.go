@@ -12,8 +12,8 @@ import (
 
 var (
 	ErrCustomUnknownRequest1 = errorsmod.Register("committee", 11, "unknown request in submit-score")
-	ErrCustomScoreDecode     = errorsmod.Register("committee", 12, "score decode error")
-	ErrCustomScoreConflict   = errorsmod.Register("committee", 13, "score conflict error")
+	ErrCustomScoreDecode     = errorsmod.Register("committee", 12, "score decode error in submit-score")
+	ErrCustomScoreConflict   = errorsmod.Register("committee", 13, "score conflict error in submit-score")
 )
 
 func (k msgServer) SubmitScore(

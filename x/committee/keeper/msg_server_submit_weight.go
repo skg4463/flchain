@@ -11,9 +11,9 @@ import (
 )
 
 var (
-	ErrCustomUnknownRequest = errorsmod.Register("committee", 1, "unknown request")
-	ErrCustomConflict       = errorsmod.Register("committee", 2, "conflict error")
-	ErrCustomTxDecode       = errorsmod.Register("committee", 3, "tx decode error")
+	ErrCustomUnknownRequest = errorsmod.Register("committee", 1, "unknown request in submit-weight")
+	ErrCustomConflict       = errorsmod.Register("committee", 2, "conflict error in submit-weight")
+	ErrCustomTxDecode       = errorsmod.Register("committee", 3, "tx decode error in submit-weight")
 )
 
 func (k msgServer) SubmitWeight(
