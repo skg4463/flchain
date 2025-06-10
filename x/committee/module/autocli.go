@@ -41,6 +41,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a submit-weight tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "lnodeId"}, {ProtoField: "encryptedWeight"}, {ProtoField: "round"}},
 				},
+				{
+					RpcMethod:      "SubmitScore",
+					Use:            "submit-score [cnode-id] [round] [scores-json]",
+					Short:          "Send a submit-score tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "cnodeId"}, {ProtoField: "round"}, {ProtoField: "scoresJson"}},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

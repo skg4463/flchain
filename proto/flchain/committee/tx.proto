@@ -18,6 +18,7 @@ service Msg {
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams (MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc SubmitWeight (MsgSubmitWeight) returns (MsgSubmitWeightResponse);
+  rpc SubmitScore  (MsgSubmitScore ) returns (MsgSubmitScoreResponse );
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -46,4 +47,14 @@ message MsgSubmitWeight {
 }
 
 message MsgSubmitWeightResponse {}
+
+message MsgSubmitScore {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator    = 1;
+  string cnodeId    = 2;
+  uint64 round      = 3;
+  string scoresJson = 4;
+}
+
+message MsgSubmitScoreResponse {}
 
