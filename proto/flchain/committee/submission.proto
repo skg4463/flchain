@@ -1,5 +1,5 @@
 syntax = "proto3";
-package committee;
+package flchain.committee;
 
 option go_package = "flchain/x/committee/types";
 
