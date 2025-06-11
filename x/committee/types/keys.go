@@ -34,7 +34,7 @@ func SubmissionKey(round uint64, lnodeId string) []byte {
 
 // ScoreKey는 라운드, cnodeId, lnodeId 조합으로 유니크한 key 생성
 // cnodeId는 committee node ID, lnodeId는 learner node ID
-// 예: "Score:Round:Cnode1:Lnode1"
+// 예: "Score=Round:Cnode1:Lnode1"
 func ScoreKey(round uint64, cnodeId, lnodeId string) []byte {
 	roundBytes := make([]byte, 8)
 	binary.BigEndian.PutUint64(roundBytes, round)
