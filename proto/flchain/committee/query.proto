@@ -42,6 +42,7 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
 }
 
+// keeper/get_submission.go
 message QueryGetSubmissionRequest {
   string lnodeId = 1;
   uint64 round   = 2;
@@ -51,6 +52,7 @@ message QueryGetSubmissionResponse {
   Submission submission = 1;
 }
 
+// keeper/get_score.go
 message QueryGetScoreRequest {
   uint64 round   = 1;
   string cnodeId = 2;
