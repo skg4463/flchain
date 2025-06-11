@@ -2,18 +2,19 @@
 package committee
 
 import (
+	fmt "fmt"
+	io "io"
+	reflect "reflect"
+	sync "sync"
+
 	_ "cosmossdk.io/api/amino"
 	_ "cosmossdk.io/api/cosmos/msg/v1"
-	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	io "io"
-	reflect "reflect"
-	sync "sync"
 )
 
 var (
@@ -2867,10 +2868,10 @@ type MsgSubmitWeight struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Creator         string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	LnodeId         string `protobuf:"bytes,2,opt,name=lnodeId,proto3" json:"lnodeId,omitempty"`
-	EncryptedWeight string `protobuf:"bytes,3,opt,name=encryptedWeight,proto3" json:"encryptedWeight,omitempty"`
-	Round           uint64 `protobuf:"varint,4,opt,name=round,proto3" json:"round,omitempty"`
+	Creator         string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`                 // 제출자 주소 (msg.sender)
+	LnodeId         string `protobuf:"bytes,2,opt,name=lnodeId,proto3" json:"lnodeId,omitempty"`                 // L-node ID
+	EncryptedWeight string `protobuf:"bytes,3,opt,name=encryptedWeight,proto3" json:"encryptedWeight,omitempty"` // 암호화된 학습 결과
+	Round           uint64 `protobuf:"varint,4,opt,name=round,proto3" json:"round,omitempty"`                    // 제출 라운드
 }
 
 func (x *MsgSubmitWeight) Reset() {
@@ -2952,10 +2953,10 @@ type MsgSubmitScore struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Creator    string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	CnodeId    string `protobuf:"bytes,2,opt,name=cnodeId,proto3" json:"cnodeId,omitempty"`
-	Round      uint64 `protobuf:"varint,3,opt,name=round,proto3" json:"round,omitempty"`
-	ScoresJson string `protobuf:"bytes,4,opt,name=scoresJson,proto3" json:"scoresJson,omitempty"`
+	Creator    string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`       // 제출자 주소 (msg.sender)
+	CnodeId    string `protobuf:"bytes,2,opt,name=cnodeId,proto3" json:"cnodeId,omitempty"`       // C-node ID
+	Round      uint64 `protobuf:"varint,3,opt,name=round,proto3" json:"round,omitempty"`          // 제출 라운드
+	ScoresJson string `protobuf:"bytes,4,opt,name=scoresJson,proto3" json:"scoresJson,omitempty"` // L-node 목록(JSON) '[{"lnodeId":"node1","score":"0.88"},{"lnodeId":"node2","score":"0.67"}]'
 }
 
 func (x *MsgSubmitScore) Reset() {

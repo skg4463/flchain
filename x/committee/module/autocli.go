@@ -24,6 +24,13 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "lnodeId"}, {ProtoField: "round"}},
 				},
 
+				{
+					RpcMethod:      "GetScore",
+					Use:            "get-score [round] [cnode-id] [lnode-id]",
+					Short:          "Query get-score",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "round"}, {ProtoField: "cnodeId"}, {ProtoField: "lnodeId"}},
+				},
+
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

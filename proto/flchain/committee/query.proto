@@ -25,6 +25,12 @@ service Query {
     option (google.api.http).get = "/flchain/committee/get_submission/{lnodeId}/{round}";
   
   }
+  
+  // Queries a list of GetScore items.
+  rpc GetScore (QueryGetScoreRequest) returns (QueryGetScoreResponse) {
+    option (google.api.http).get = "/flchain/committee/get_score/{round}/{cnodeId}/{lnodeId}";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -43,5 +49,15 @@ message QueryGetSubmissionRequest {
 
 message QueryGetSubmissionResponse {
   Submission submission = 1;
+}
+
+message QueryGetScoreRequest {
+  uint64 round   = 1;
+  string cnodeId = 2;
+  string lnodeId = 3;
+}
+
+message QueryGetScoreResponse {
+  string scoreJson = 1;
 }
 
