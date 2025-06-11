@@ -2,19 +2,18 @@
 package committee
 
 import (
-	fmt "fmt"
-	io "io"
-	reflect "reflect"
-	sync "sync"
-
 	_ "cosmossdk.io/api/amino"
 	_ "cosmossdk.io/api/cosmos/base/query/v1beta1"
+	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	io "io"
+	reflect "reflect"
+	sync "sync"
 )
 
 var (
@@ -2740,6 +2739,7 @@ func (x *QueryParamsResponse) GetParams() *Params {
 	return nil
 }
 
+// keeper/get_submission.go
 type QueryGetSubmissionRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2818,6 +2818,7 @@ func (x *QueryGetSubmissionResponse) GetSubmission() *Submission {
 	return nil
 }
 
+// keeper/get_score.go
 type QueryGetScoreRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

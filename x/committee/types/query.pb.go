@@ -6,10 +6,6 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-
 	_ "github.com/cosmos/cosmos-sdk/types/query"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
@@ -19,6 +15,9 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	io "io"
+	math "math"
+	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -115,6 +114,7 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
+// keeper/get_submission.go
 type QueryGetSubmissionRequest struct {
 	LnodeId string `protobuf:"bytes,1,opt,name=lnodeId,proto3" json:"lnodeId,omitempty"`
 	Round   uint64 `protobuf:"varint,2,opt,name=round,proto3" json:"round,omitempty"`
@@ -211,6 +211,7 @@ func (m *QueryGetSubmissionResponse) GetSubmission() *Submission {
 	return nil
 }
 
+// keeper/get_score.go
 type QueryGetScoreRequest struct {
 	Round   uint64 `protobuf:"varint,1,opt,name=round,proto3" json:"round,omitempty"`
 	CnodeId string `protobuf:"bytes,2,opt,name=cnodeId,proto3" json:"cnodeId,omitempty"`
