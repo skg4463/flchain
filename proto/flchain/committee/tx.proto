@@ -40,20 +40,20 @@ message MsgUpdateParamsResponse {}
 
 message MsgSubmitWeight {
   option (cosmos.msg.v1.signer) = "creator";
-  string creator         = 1;
-  string lnodeId         = 2;
-  string encryptedWeight = 3;
-  uint64 round           = 4;
+  string creator         = 1;   // 제출자 주소 (msg.sender)
+  string lnodeId         = 2;   // L-node ID
+  string encryptedWeight = 3;   // 암호화된 학습 결과
+  uint64 round           = 4;   // 제출 라운드
 }
 
 message MsgSubmitWeightResponse {}
 
 message MsgSubmitScore {
   option (cosmos.msg.v1.signer) = "creator";
-  string creator    = 1;
-  string cnodeId    = 2;
-  uint64 round      = 3;
-  string scoresJson = 4;
+  string creator    = 1;    // 제출자 주소 (msg.sender)
+  string cnodeId    = 2;    // C-node ID
+  uint64 round      = 3;    // 제출 라운드
+  string scoresJson = 4;    // L-node 목록(JSON) '[{"lnodeId":"node1","score":"0.88"},{"lnodeId":"node2","score":"0.67"}]'
 }
 
 message MsgSubmitScoreResponse {}
