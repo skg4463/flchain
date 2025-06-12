@@ -22,6 +22,7 @@ const (
 	Query_Params_FullMethodName        = "/flchain.committee.Query/Params"
 	Query_GetSubmission_FullMethodName = "/flchain.committee.Query/GetSubmission"
 	Query_GetScore_FullMethodName      = "/flchain.committee.Query/GetScore"
+	Query_GetCommitAtt_FullMethodName  = "/flchain.committee.Query/GetCommitAtt"
 )
 
 // QueryClient is the client API for Query service.
@@ -34,6 +35,8 @@ type QueryClient interface {
 	GetSubmission(ctx context.Context, in *QueryGetSubmissionRequest, opts ...grpc.CallOption) (*QueryGetSubmissionResponse, error)
 	// Queries a list of GetScore items.
 	GetScore(ctx context.Context, in *QueryGetScoreRequest, opts ...grpc.CallOption) (*QueryGetScoreResponse, error)
+	// Queries a list of GetCommitAtt items.
+	GetCommitAtt(ctx context.Context, in *QueryGetCommitAttRequest, opts ...grpc.CallOption) (*QueryGetCommitAttResponse, error)
 }
 
 type queryClient struct {
@@ -71,6 +74,15 @@ func (c *queryClient) GetScore(ctx context.Context, in *QueryGetScoreRequest, op
 	return out, nil
 }
 
+func (c *queryClient) GetCommitAtt(ctx context.Context, in *QueryGetCommitAttRequest, opts ...grpc.CallOption) (*QueryGetCommitAttResponse, error) {
+	out := new(QueryGetCommitAttResponse)
+	err := c.cc.Invoke(ctx, Query_GetCommitAtt_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -81,6 +93,8 @@ type QueryServer interface {
 	GetSubmission(context.Context, *QueryGetSubmissionRequest) (*QueryGetSubmissionResponse, error)
 	// Queries a list of GetScore items.
 	GetScore(context.Context, *QueryGetScoreRequest) (*QueryGetScoreResponse, error)
+	// Queries a list of GetCommitAtt items.
+	GetCommitAtt(context.Context, *QueryGetCommitAttRequest) (*QueryGetCommitAttResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -96,6 +110,9 @@ func (UnimplementedQueryServer) GetSubmission(context.Context, *QueryGetSubmissi
 }
 func (UnimplementedQueryServer) GetScore(context.Context, *QueryGetScoreRequest) (*QueryGetScoreResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetScore not implemented")
+}
+func (UnimplementedQueryServer) GetCommitAtt(context.Context, *QueryGetCommitAttRequest) (*QueryGetCommitAttResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCommitAtt not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -164,6 +181,24 @@ func _Query_GetScore_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetCommitAtt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetCommitAttRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetCommitAtt(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetCommitAtt_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetCommitAtt(ctx, req.(*QueryGetCommitAttRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -182,6 +217,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetScore",
 			Handler:    _Query_GetScore_Handler,
+		},
+		{
+			MethodName: "GetCommitAtt",
+			Handler:    _Query_GetCommitAtt_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

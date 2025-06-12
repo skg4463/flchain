@@ -1,0 +1,13 @@
+syntax = "proto3";
+package flchain.committee;
+
+option go_package = "flchain/x/committee/types";
+
+message CommitAtt {
+  uint64 round = 1;
+  map<string, double> ewmaMap = 2;
+  map<string, double> swMap = 3;
+  repeated string ranking = 4;
+  string clNode = 5;
+  repeated string committee = 6;
+}

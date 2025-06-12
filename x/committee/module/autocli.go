@@ -31,6 +31,20 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "round"}, {ProtoField: "cnodeId"}, {ProtoField: "lnodeId"}},
 				},
 
+				{
+					RpcMethod:      "GetCommitAtt",
+					Use:            "get-commit-att [round]",
+					Short:          "Query get-commit-att",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "round"}},
+				},
+
+				{
+					RpcMethod:      "GetCommitAtt",
+					Use:            "get-commit-att [round]",
+					Short:          "Query get-commit-att",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "round"}},
+				},
+
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

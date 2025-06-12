@@ -10,6 +10,7 @@ type CommitAtt struct {
 	Committee []string           `json:"committee"` // 위원회(상위 5명)
 }
 
+//
 // ScoreEntry: C-node의 평가 결과
 // type ScoreEntry struct {
 // 	LnodeId string `json:"lnodeId"`

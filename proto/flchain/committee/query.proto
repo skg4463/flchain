@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "flchain/committee/params.proto";
 import "flchain/committee/submission.proto";
+import "flchain/committee/commit_att.proto";
 
 option go_package = "flchain/x/committee/types";
 
@@ -29,6 +30,12 @@ service Query {
   // Queries a list of GetScore items.
   rpc GetScore (QueryGetScoreRequest) returns (QueryGetScoreResponse) {
     option (google.api.http).get = "/flchain/committee/get_score/{round}/{cnodeId}/{lnodeId}";
+  
+  }
+  
+  // Queries a list of GetCommitAtt items.
+  rpc GetCommitAtt (QueryGetCommitAttRequest) returns (QueryGetCommitAttResponse) {
+    option (google.api.http).get = "/flchain/committee/get_commit_att/{round}";
   
   }
 }
@@ -61,5 +68,13 @@ message QueryGetScoreRequest {
 
 message QueryGetScoreResponse {
   string scoreJson = 1;
+}
+
+message QueryGetCommitAttRequest {
+  uint64 round = 1;
+}
+
+message QueryGetCommitAttResponse {
+  CommitAtt commitAtt = 1;
 }
 

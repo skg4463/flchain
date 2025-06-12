@@ -18,72 +18,112 @@ func (k Keeper) EndBlocker(ctx sdk.Context) {
 	// 라운드-블록 매핑: 3블록=1라운드 예시(환경에 맞게 조정)
 	round := uint64(blockHeight / 3)
 
+	// Block 역할 구분
+	// Block 1(3n+1): l-node 제출 블록 (EndBlocker에서는 별도 작업 없음)
+	// Block 2(3n+2): c-node 제출/집계 블록 (여기서 집계, 위원회/CL-node 선출)
+	// Block 3(3n+3): validator set 교체 위한 staking tx (EndBlocker는 별도 작업 없음)
+
+	// 역할 설명
+	blockPhase := blockHeight%3 + 1
+	var phaseDesc string
+	switch blockPhase {
+	case 1:
+		phaseDesc = "L-node submit Phase"
+	case 2:
+		phaseDesc = "C-node submit/Aggregation Phase"
+	case 3:
+		phaseDesc = "Validator Set Replacement/Waiting Phase"
+	}
+
+	// 로그: 블록, 라운드, 라운드 역할 출력
+	ctx.Logger().Info("test Round Config",
+		"Round", round,
+		"BlockPhase", blockPhase,
+		"Role", phaseDesc,
+		"Block", blockHeight,
+	)
+
 	// Logging: 라운드 정보 출력
 	//fmt.Println("[Committee EndBlocker] Called for round", round)
-	ctx.Logger().Error("EndBlocker called for round", "round", round, "BlockHeight", blockHeight)
+	//ctx.Logger().Error("EndBlocker called for round", "round", round, "BlockHeight", blockHeight)
 
-	// 1. 이번 라운드의 l-node 목록 동적으로 불러오기
-	lnodeIds := k.GetAllLnodeIds(ctx, round)
+	if blockPhase == 2 {
 
-	// 2. 해당 라운드의 모든 l-node score 불러오기
-	scores := k.GetAllScoresForRound(ctx, round)
+		// 1. 이번 라운드의 l-node 목록 동적으로 불러오기
+		lnodeIds := k.GetAllLnodeIds(ctx, round)
 
-	// 3. 이전 라운드 EWMA 값 불러오기 (없으면 0)
-	prevEwma := k.GetPrevEwmaForAllLnodes(ctx, round-1, lnodeIds)
+		// 2. 해당 라운드의 모든 l-node score 불러오기
+		scores := k.GetAllScoresForRound(ctx, round)
 
-	// 4. EWMA 계산 및 저장
-	beta := 0.7
-	ewmaMap := map[string]float64{}
-	sumEwma := 0.0
-	for _, lnodeId := range lnodeIds {
-		score := scores[lnodeId]
-		oldEwma := prevEwma[lnodeId]
-		ewma := beta*score + (1-beta)*oldEwma
-		ewmaMap[lnodeId] = ewma
-		sumEwma += ewma
-		bz, _ := json.Marshal(ewma)
-		k.Set(ctx, types.EwmaKey(round, lnodeId), bz)
-	}
+		// 3. 이전 라운드 EWMA 값 불러오기 (없으면 0)
+		prevEwma := k.GetPrevEwmaForAllLnodes(ctx, round-1, lnodeIds)
 
-	// 5. Sw 계산 및 저장
-	swMap := map[string]float64{}
-	for _, lnodeId := range lnodeIds {
-		ewma := ewmaMap[lnodeId]
-		sw := 0.0
-		if sumEwma > 0 {
-			sw = ewma / sumEwma
+		// 4. EWMA 계산 및 저장
+		beta := 0.7
+		ewmaMap := map[string]float64{}
+		sumEwma := 0.0
+		for _, lnodeId := range lnodeIds {
+			score := scores[lnodeId]
+			oldEwma := prevEwma[lnodeId]
+			ewma := beta*score + (1-beta)*oldEwma
+			ewmaMap[lnodeId] = ewma
+			sumEwma += ewma
+			bz, _ := json.Marshal(ewma)
+			k.Set(ctx, types.EwmaKey(round, lnodeId), bz)
 		}
-		swMap[lnodeId] = sw
-		bz, _ := json.Marshal(sw)
-		k.Set(ctx, types.SwKey(round, lnodeId), bz)
-	}
 
-	// 6. Sw 내림차순으로 l-node 랭킹 산출
-	ranking := SortLnodesBySwDesc(swMap)
-
-	// 7. committee/CL-node 선출
-	clNode := ""
-	committee := []string{}
-	if len(ranking) > 0 {
-		clNode = ranking[0]
-		top := 5
-		if len(ranking) < top {
-			top = len(ranking)
+		// 5. Sw 계산 및 저장
+		swMap := map[string]float64{}
+		for _, lnodeId := range lnodeIds {
+			ewma := ewmaMap[lnodeId]
+			sw := 0.0
+			if sumEwma > 0 {
+				sw = ewma / sumEwma
+			}
+			swMap[lnodeId] = sw
+			bz, _ := json.Marshal(sw)
+			k.Set(ctx, types.SwKey(round, lnodeId), bz)
 		}
-		committee = ranking[:top]
+
+		// 6. Sw 내림차순으로 l-node 랭킹 산출
+		ranking := SortLnodesBySwDesc(swMap)
+
+		// 7. committee/CL-node 선출
+		clNode := ""
+		committee := []string{}
+		if len(ranking) > 0 {
+			clNode = ranking[0]
+			top := 5
+			if len(ranking) < top {
+				top = len(ranking)
+			}
+			committee = ranking[:top]
+		}
+
+		// 8. 집계 결과(CommitAtt)를 state에 JSON 직렬화로 저장
+		k.StoreCommitAtt(ctx, round, ewmaMap, swMap, ranking, clNode, committee)
+
+		// 9. 이벤트/로그 기록
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent("EndBlock-Committee",
+				sdk.NewAttribute("round", fmt.Sprint(round)),
+				sdk.NewAttribute("cl-node", clNode),
+				sdk.NewAttribute("committee", fmt.Sprint(committee)),
+			),
+		)
+
+		ctx.Logger().Info("test Aggregation Result",
+			"round", round,
+			"phase", phaseDesc,
+			"phase", phaseDesc,
+			"block", blockHeight,
+			"cl-node(블록생성자)", clNode,
+			"committee", committee,
+			"ranking", ranking,
+			"ewma", ewmaMap,
+			"sw", swMap,
+		)
 	}
-
-	// 8. 집계 결과(CommitAtt)를 state에 JSON 직렬화로 저장
-	k.StoreCommitAtt(ctx, round, ewmaMap, swMap, ranking, clNode, committee)
-
-	// 9. 이벤트/로그 기록
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent("EndBlock-Committee",
-			sdk.NewAttribute("round", fmt.Sprint(round)),
-			sdk.NewAttribute("cl-node", clNode),
-			sdk.NewAttribute("committee", fmt.Sprint(committee)),
-		),
-	)
 }
 
 // ------------------- 유틸리티 함수들 -------------------
