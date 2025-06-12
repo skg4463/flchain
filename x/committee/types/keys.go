@@ -42,7 +42,7 @@ func ScoreKey(round uint64, cnodeId, lnodeId string) []byte {
 	return append(append(append([]byte("score:"), roundBytes...), []byte(":"+cnodeId+":")...), []byte(lnodeId)...)
 }
 
-// commit-att 관련 key gen 함수수
+// commit-att 관련 key gen 함수
 // round별 집계 결과(EWMA, Sw, ranking 등) 저장 key
 func CommitAttKey(round uint64) []byte {
 	roundBytes := make([]byte, 8)
@@ -76,4 +76,11 @@ func CommitteeKey(round uint64) []byte {
 	roundBytes := make([]byte, 8)
 	binary.BigEndian.PutUint64(roundBytes, round)
 	return append([]byte("committee:"), roundBytes...)
+}
+
+// round 별 l-node 집합 저장 key (동적 목록 관리)
+func LnodeSetKey(round uint64) []byte {
+	roundBytes := make([]byte, 8)
+	binary.BigEndian.PutUint64(roundBytes, round)
+	return append([]byte("lnodeSet:"), roundBytes...)
 }
