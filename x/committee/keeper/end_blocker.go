@@ -15,8 +15,8 @@ import (
 func (k Keeper) EndBlocker(ctx sdk.Context) {
 	blockHeight := ctx.BlockHeight()
 
-	// 라운드-블록 매핑: 2블록=1라운드 예시(환경에 맞게 조정)
-	round := uint64(blockHeight / 2)
+	// 라운드-블록 매핑: 3블록=1라운드 예시(환경에 맞게 조정)
+	round := uint64(blockHeight / 3)
 
 	// Logging: 라운드 정보 출력
 	//fmt.Println("[Committee EndBlocker] Called for round", round)
